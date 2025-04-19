@@ -46,17 +46,17 @@ st.write(f"こんにちは、{name}さん！")
 #     st.info("これは隠れたコンテンツです！")
 
 # スライダー
-# st.subheader("スライダー")
-# age = st.slider("年齢", 0, 100, 25)
-# st.write(f"あなたの年齢: {age}")
+st.subheader("スライダー")
+age = st.slider("年齢", 0, 100, 25)
+st.write(f"あなたの年齢: {age}")
 
 # セレクトボックス
-# st.subheader("セレクトボックス")
-# option = st.selectbox(
-#     "好きなプログラミング言語は?",
-#     ["Python", "JavaScript", "Java", "C++", "Go", "Rust"]
-# )
-# st.write(f"あなたは{option}を選びました")
+st.subheader("セレクトボックス")
+option = st.selectbox(
+    "好きなプログラミング言語は?",
+    ["Python", "JavaScript", "Java", "C++", "Go", "Rust"]
+)
+st.write(f"あなたは{option}を選びました")
 
 # ============================================
 # レイアウト
@@ -117,36 +117,36 @@ st.write(f"こんにちは、{name}さん！")
 # ============================================
 # グラフ表示
 # ============================================
-# st.header("グラフの表示")
+st.header("グラフの表示")
 
 # ラインチャート
-# st.subheader("ラインチャート")
-# chart_data = pd.DataFrame(
-#     np.random.randn(20, 3),
-#     columns=['A', 'B', 'C'])
-# st.line_chart(chart_data)
+st.subheader("ラインチャート")
+chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['A', 'B', 'C'])
+st.line_chart(chart_data)
 
 # バーチャート
-# st.subheader("バーチャート")
-# chart_data = pd.DataFrame({
-#     'カテゴリ': ['A', 'B', 'C', 'D'],
-#     '値': [10, 25, 15, 30]
-# }).set_index('カテゴリ')
-# st.bar_chart(chart_data)
+st.subheader("バーチャート")
+chart_data = pd.DataFrame({
+    'カテゴリ': ['A', 'B', 'C', 'D'],
+    '値': [10, 25, 15, 30]
+}).set_index('カテゴリ')
+st.bar_chart(chart_data)
 
 # ============================================
 # インタラクティブ機能
 # ============================================
-# st.header("インタラクティブ機能")
+st.header("インタラクティブ機能")
 
 # プログレスバー
-# st.subheader("プログレスバー")
-# progress = st.progress(0)
-# if st.button("進捗をシミュレート"):
-#     for i in range(101):
-#         time.sleep(0.01)
-#         progress.progress(i / 100)
-#     st.balloons()
+st.subheader("プログレスバー")
+progress = st.progress(0)
+if st.button("進捗をシミュレート"):
+    for i in range(101):
+        time.sleep(0.01)
+        progress.progress(i / 100)
+    st.balloons()
 
 # ファイルアップロード
 # st.subheader("ファイルアップロード")
