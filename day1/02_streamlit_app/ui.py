@@ -125,6 +125,19 @@ def display_history_list(history_df):
         label_visibility="collapsed" # ラベル非表示
     )
 
+    # ここから追加 ---------------------------
+    search_query = st.text_input("キーワードで検索", key="search_query_input")
+    # 空白ならフィルタしない
+    if search_query:
+        # 質問 or 回答 にキーワードが含まれているかをフィルタ
+        filtered_df = filtered_df[
+            filtered_df["question"].str.contains(search_query, na=False, case=False) |
+            filtered_df["answer"].str.contains(search_query, na=False, case=False)
+        ]
+    # ここまで追加 ---------------------------
+
+
+
     filter_value = filter_options[display_option]
     if filter_value is not None:
         # is_correctがNaNの場合を考慮
