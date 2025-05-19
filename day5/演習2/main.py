@@ -1,4 +1,6 @@
 import os
+import random
+
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -247,8 +249,42 @@ def test_model_performance():
         metrics["inference_time"] < 1.0
     ), f"推論時間が長すぎます: {metrics['inference_time']}秒"
 
+def append_accuracy_log(accuracy, path="models/accuracy_log.txt"):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a") as f:
+        f.write(f"{accuracy:.6f}\n")
+
+def compare_with_previous_accuracy(path="models/accuracy_log.txt"):
+    if not os.path.exists(path):
+        print("初回実行。精度比較ログが存在しません。")
+        return
+
+    with open(path, "r") as f:
+        lines = f.read().strip().splitlines()
+
+    if len(lines) < 2:
+        print("精度比較には2回以上の実行が必要です。")
+        return
+
+    prev_accuracy = float(lines[-2])
+    curr_accuracy = float(lines[-1])
+    diff = curr_accuracy - prev_accuracy
+
+    print("\n【前回との精度比較】")
+    if diff > 0:
+        print(f"精度が向上: {curr_accuracy:.6f} > {prev_accuracy:.6f}（差分: +{diff:.6f}）")
+    elif diff < 0:
+        print(f"精度が悪化: {curr_accuracy:.6f} < {prev_accuracy:.6f}（差分: {diff:.6f}）")
+    else:
+        print(f"精度に変化なし: {curr_accuracy:.6f} = {prev_accuracy:.6f}")
+
+
 
 if __name__ == "__main__":
+    split_seed = random.randint(1, 1000)
+    model_seed = random.randint(1, 1000)
+    print(f"Split seed: {split_seed}, Model seed: {model_seed}")
+
     # データロード
     data = DataLoader.load_titanic_data()
     X, y = DataLoader.preprocess_titanic_data(data)
@@ -266,15 +302,16 @@ if __name__ == "__main__":
 
     # モデルのトレーニングと評価
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
+        X, y, test_size=0.2, random_state=split_seed
     )
 
     # パラメータ設定
-    model_params = {"n_estimators": 100, "random_state": 42}
+    model_params = {"n_estimators": 100, "random_state": model_seed}
 
     # モデルトレーニング
     model = ModelTester.train_model(X_train, y_train, model_params)
     metrics = ModelTester.evaluate_model(model, X_test, y_test)
+    append_accuracy_log(metrics["accuracy"])
 
     print(f"精度: {metrics['accuracy']:.4f}")
     print(f"推論時間: {metrics['inference_time']:.4f}秒")
@@ -285,3 +322,5 @@ if __name__ == "__main__":
     # ベースラインとの比較
     baseline_ok = ModelTester.compare_with_baseline(metrics)
     print(f"ベースライン比較: {'合格' if baseline_ok else '不合格'}")
+
+    compare_with_previous_accuracy()
